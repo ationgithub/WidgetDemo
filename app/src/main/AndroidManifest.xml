@@ -1,7 +1,74 @@
 <?xml version="1.0" encoding="utf-8"?>
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     package="com.oitsme.widgetdemo">
+    <uses-permission android:name="android.permission.RECEIVE_BOOT_COMPLETED" />
 
+    <uses-permission android:name="android.permission.CAMERA" />
+    <uses-feature android:name="android.hardware.camera" />
+    <uses-feature android:name="android.hardware.camera.autofocus" />
+    <uses-feature android:name="android.hardware.bluetooth_le"
+        android:required="true" />
+
+
+    <!--用于进行网络定位-->
+    <uses-permission android:name="android.permission.ACCESS_COARSE_LOCATION"></uses-permission>
+    <!--用于访问GPS定位-->
+    <uses-permission android:name="android.permission.ACCESS_FINE_LOCATION"></uses-permission>
+    <!--用于获取运营商信息，用于支持提供运营商信息相关的接口-->
+    <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE"></uses-permission>
+    <!--用于访问wifi网络信息，wifi信息会用于进行网络定位-->
+    <uses-permission android:name="android.permission.ACCESS_WIFI_STATE"></uses-permission>
+    <!--用于获取wifi的获取权限，wifi信息会用来进行网络定位-->
+    <uses-permission android:name="android.permission.CHANGE_WIFI_STATE"></uses-permission>
+    <!--用于访问网络，网络定位需要上网-->
+    <uses-permission android:name="android.permission.INTERNET"></uses-permission>
+    <!--用于写入缓存数据到扩展存储卡-->
+    <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE"></uses-permission>
+    <!--用于申请调用A-GPS模块-->
+    <uses-permission android:name="android.permission.ACCESS_LOCATION_EXTRA_COMMANDS"></uses-permission>
+    <!--用于申请获取蓝牙信息进行室内定位-->
+    <uses-permission android:name="android.permission.BLUETOOTH"></uses-permission>
+    <uses-permission android:name="android.permission.BLUETOOTH_ADMIN"></uses-permission>
+
+    <uses-permission android:name="android.permission.WAKE_LOCK"/>
+
+    <uses-permission android:name="android.permission.GET_TASKS"/>
+    <uses-permission android:name="android.permission.SENSOR_INFO"/>
+    <uses-permission android:name="android.permission.SENSOR_ENABLE"/>
+    <uses-permission android:name="android.permission.MOUNT_UNMOUNT_FILESYSTEMS"/>
+
+    //震动权限
+    <uses-permission android:name="android.permission.VIBRATE"/>
+
+
+
+    <!--科大讯飞start-->
+    <!--连接网络权限，用于执行云端语音能力 -->
+    <uses-permission android:name="android.permission.INTERNET" />
+    <!--获取手机录音机使用权限，听写、识别、语义理解需要用到此权限 -->
+    <uses-permission android:name="android.permission.RECORD_AUDIO" />
+    <!--读取网络信息状态 -->
+    <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
+    <!--获取当前wifi状态 -->
+    <uses-permission android:name="android.permission.ACCESS_WIFI_STATE" />
+    <!--允许程序改变网络连接状态 -->
+    <uses-permission android:name="android.permission.CHANGE_NETWORK_STATE" />
+    <!--读取手机信息权限 -->
+    <uses-permission android:name="android.permission.READ_PHONE_STATE" />
+    <!--读取联系人权限，上传联系人需要用到此权限 -->
+    <uses-permission android:name="android.permission.READ_CONTACTS" />
+    <!--外存储写权限，构建语法需要用到此权限 -->
+    <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" />
+    <!--外存储读权限，构建语法需要用到此权限 -->
+    <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE" />
+    <!--配置权限，用来记录应用配置信息 -->
+    <uses-permission android:name="android.permission.WRITE_SETTINGS" />
+    <!--手机定位信息，用来为语义等功能提供定位，提供更精准的服务-->
+    <!--定位信息是敏感信息，可通过Setting.setLocationEnable(false)关闭定位请求 -->
+    <uses-permission android:name="android.permission.ACCESS_FINE_LOCATION" />
+    <!--如需使用人脸识别，还要添加：摄相头权限，拍照需要用到 -->
+    <uses-permission android:name="android.permission.CAMERA" />
+    <!--科大讯飞end-->
     <application
         android:name=".MyApp"
         android:allowBackup="true"
@@ -13,7 +80,6 @@
         <activity android:name=".MainActivity">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
-
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
@@ -21,11 +87,12 @@
         <receiver android:name=".widget.ListWidgetProvider">
             <intent-filter>
                 <action android:name="android.appwidget.action.APPWIDGET_UPDATE" />
-
                 <!-- ListWidgetProvider接收点击ListView的响应事件 -->
                 <action android:name="com.zhpan.COLLECTION_VIEW_ACTION" />
                 <!-- ListWidgetProvider接收点击bt_refresh的响应事件 -->
                 <action android:name="com.zhpan.REFRESH_WIDGET" />
+
+                <action android:name="com.zhpan.COLLECTION_VIEW_EXTRA" />
                 <action android:name="com.zhpan.LOCK_ACTION"/>
                 <action android:name="com.zhpan.UNLOCK_ACTION"/>
             </intent-filter>
@@ -33,9 +100,33 @@
                 android:resource="@xml/widget_provider"/>
         </receiver>
 
+        <!--<receiver android:name=".myReceiver" >-->
+            <!--<intent-filter android:priority="2147483647" >&lt;!&ndash;优先级加最高&ndash;&gt;-->
+                <!--&lt;!&ndash; 系统启动完成后会调用 &ndash;&gt;-->
+                <!--<action android:name="android.intent.action.BOOT_COMPLETED" />-->
+                <!--&lt;!&ndash; 解锁完成后会调用 &ndash;&gt;-->
+                <!--<action android:name="android.intent.action.USER_PRESENT" />-->
+                <!--&lt;!&ndash; 监听情景切换 &ndash;&gt;-->
+                <!--<action android:name="android.media.RINGER_MODE_CHANGED" />-->
+            <!--</intent-filter>-->
+        <!--</receiver>-->
+
         <service
             android:name=".widget.ListWidgetService"
-            android:permission="android.permission.BIND_REMOTEVIEWS" />
+            android:permission="android.permission.BIND_REMOTEVIEWS"
+            android:exported="false" />
+
+        <activity android:name=".TransferActivity">
+            <intent-filter>
+                <action android:name="com.wuzy.aidlserver.TransferActivity.FROM_SELF" />
+                <action android:name="com.wuzy.aidlserver.TransferActivity.FROM_OTHER" />
+            </intent-filter>
+        </activity>
+
+        <service android:name=".RemoteService"
+            android:permission="android.permission.BIND_REMOTEVIEWS"
+            android:exported="false" />
+            />
     </application>
 
 </manifest>
